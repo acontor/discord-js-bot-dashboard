@@ -1,0 +1,14 @@
+<%- include("_header") -%>
+
+Bienvenido.
+
+<% if (!user) { %>
+<a href="/login">Iniciar sesión</a>
+<% } else if (!user.guild) { %>
+<a href="/dashboard/guilds">Escoger guild</a>
+<a href="/logout">Cerrar sesión</a>
+<% } else { %>
+<a href="/logout">Cerrar sesión</a>
+<% } %>
+
+<%- include("_footer") -%>
