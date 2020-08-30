@@ -1,0 +1,44 @@
+<footer class="text-center footer">
+    <div class="mb-2">
+        <small>
+            © 2020 creado con <i class="fa fa-heart" style="color:red">Node.js</i> por - <a target="_blank"
+                rel="noopener noreferrer" href="https://github.com/acontor">
+                Álvaro Conde
+            </a>
+        </small>
+    </div>
+    <div>
+        <a href="https://github.com/acontor" target="_blank">
+            Github
+        </a>
+        <a href="https://twitter.com/acontor10" target="_blank">
+            Twitter
+        </a>
+    </div>
+</footer>
+
+</div>
+</div>
+
+<!-- jQuery CDN -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<!-- Bootstrap Js CDN -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- jQuery Custom Scroller CDN -->
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js">
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar, #content').toggleClass('active');
+            $('.collapse.in').toggleClass('in');
+            $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+        });
+    });
+</script>
+
+</body>
+
+</html>
