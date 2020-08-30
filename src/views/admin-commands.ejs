@@ -1,0 +1,87 @@
+<%- include("_header") -%>
+<%- include("_nav") -%>
+
+<h1>Comandos de administración</h1>
+<form action="/dashboard/admin-commands/enable" method="post">
+    <% if (user.guild.admin_enable == 0) { %>
+    <input type="hidden" name="admin_commands_enable" value="1">
+    <button class="btn btn-sm btn-success mb-3" type="submit">Habilitar</button>
+    <% } else { %>
+    <input type="hidden" name="admin_commands_enable" value="0">
+    <button class="btn btn-sm btn-danger mb-3" type="submit">Deshabilitar</button>
+    <% } %>
+</form>
+
+<% if (user.guild.admin_enable == 1) { %>
+<div class="table-responsive-sm">
+    <table class="table table-hover">
+        <thead>
+            <tr class="text-center">
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Habilitado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (const command of commands) { %>
+            <tr class="text-center">
+                <form action="/dashboard/admin-commands/edit/<%= command.id %>" method="post">
+                    <td class="align-middle"><%= command.name %></td>
+                    <td class="align-middle"><%= command.description %></td>
+                    <%if (command.enable) { %>
+                    <td class="align-middle ">
+                        <div class="custom-control custom-switch"><input type="checkbox" name="enable"
+                                id="enable<%= command.name %>" class="custom-control-input" checked>
+                            <label class="custom-control-label" for="enable<%= command.name %>"></label>
+                        </div>
+                    </td>
+                    <% } else { %>
+                    <td class="align-middle">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" name="enable" id="enable<%= command.name %>"
+                                class="custom-control-input">
+                            <label class="custom-control-label" for="enable<%= command.name %>"></label>
+                        </div>
+                    </td>
+                    <% } %>
+                    <td class="d-print-none">
+                        <input type="submit" value="Editar" class="btn btn-default btn-warning" />
+                    </td>
+                </form>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+<% } %>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.28.2/sweetalert2.all.min.js"></script>
+<script>
+    document.getElementById('create-btn').addEventListener('click', () => {
+        Swal.fire({
+            title: '<strong>Crear comando personalizado</strong>',
+            html: '<form class="mt-5" action="/dashboard/commands/create" method="post">' +
+                '<div class="form-horizontal">' +
+                '<div class="form-group row">' +
+                '<div class="col-sm-10 offset-1">' +
+                '<input autofocus class="form-control" name="name" placeholder="Nombre" /></div></div>' +
+                '<div class="form-group row">' +
+                '<div class="col-sm-10 offset-1">' +
+                '<input class="form-control" name="description" placeholder="Descripción" /></div></div>' +
+                '<div class="form-group row">' +
+                '<div class="col-sm-10 offset-1">' +
+                '<textarea class="form-control" cols="20" name="action" maxlength="32000" rows="7" placeholder="Acción"></textarea></div></div>' +
+                '<div class="form-group row">' +
+                '<label class="col-form-label col-sm-2"></label>' +
+                '<div class="col-sm-10 offset-1">' +
+                '<input type="submit" value="Crear" class="btn btn-default btn-success mt-3" />' +
+                '</div></div></div></form>',
+            showConfirmButton: false,
+            showCancelButton: true,
+            focusConfirm: false,
+            cancelButtonText: 'Cancelar'
+        })
+    })
+</script>
+
+<%- include("_footer") -%>

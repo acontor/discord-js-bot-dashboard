@@ -1,0 +1,67 @@
+<%- include("_header") %>
+<%- include("_nav") %>
+
+<p>Mis servidores (<%- user.guilds.length %>)</p>
+
+<% if(user.guilds.length == 0) { %>
+
+Obtén permisos para administrar un servidor o crea el tuyo propio
+
+<% } else { %>
+
+<% user.guilds.forEach(guild => { %>
+<% if (!guild.bot) { %>
+<div class="card-body d-flex align-items-center">
+    <img class="img-fluid rounded-circle" src="<%- guild.icon %>" alt="">
+    <h4 class="ml-4"><%- guild.name %></h4>
+    <div class="input-group input-group-sm col-sm-3 ml-auto justify-content-center">
+        <a href="https://discord.com/api/oauth2/authorize?client_id=740876347970158612&permissions=8&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Flogin%2Fcallback&guild_id=<%- guild.id %>&scope=bot"
+            target="_blank" class="btn btn-warning">Autorizar</a>
+    </div>
+</div><br>
+<% } %>
+<% }); %>
+
+<% user.guilds.forEach(guild => { %>
+<% if (user.guild) { %>
+<% if (guild.id == user.guild.id) { %>
+<div class="card-body d-flex align-items-center">
+    <img class="img-fluid rounded-circle" src="<%- guild.icon %>" alt="">
+    <h4 class="ml-4"><%- guild.name %></h4>
+    <div class="input-group input-group-sm col-sm-3 ml-auto justify-content-center">
+        <button class="btn btn-success disable" type="submit">Seleccionado</button>
+    </div>
+</div><br>
+<% } else if(guild.bot) { %>
+<div class="card-body d-flex align-items-center">
+    <img class="img-fluid rounded-circle" src="<%- guild.icon %>" alt="">
+    <h4 class="ml-4"><%- guild.name %></h4>
+    <div class="input-group input-group-sm col-sm-3 ml-auto justify-content-center">
+        <form action="/dashboard/guild/set" method="POST">
+            <input type="hidden" name="id" value="<%- guild.id %>">
+            <div class="input-group-append">
+                <button class="btn btn-info" type="submit">Seleccionar</button>
+            </div>
+        </form>
+    </div>
+</div><br>
+<% } %>
+<% } else if(!user.guild && guild.bot) { %>
+<div class="card-body d-flex align-items-center">
+    <img class="img-fluid rounded-circle" src="<%- guild.icon %>" alt="">
+    <h4 class="ml-4"><%- guild.name %></h4>
+    <div class="input-group input-group-sm col-sm-3 ml-auto justify-content-center">
+        <form action="/dashboard/guild/set" method="POST">
+            <input type="hidden" name="id" value="<%- guild.id %>">
+            <div class="input-group-append">
+                <button class="btn btn-info" type="submit">Seleccionar</button>
+            </div>
+        </form>
+    </div>
+</div><br>
+<% } %>
+<% }); %>
+
+<% } %>
+
+<%- include("_footer") %>

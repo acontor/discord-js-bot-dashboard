@@ -1,0 +1,90 @@
+<%- include("_header") -%>
+<%- include("_nav") -%>
+
+<h1>Lista de reproducción</h1>
+<form action="/dashboard/music/enable" method="post">
+    <% if (user.guild.music_enable == 0) { %>
+    <input type="hidden" name="music_enable" value="1">
+    <button class="btn btn-sm btn-success mb-3" type="submit">Habilitar</button>
+    <% } else { %>
+    <input type="hidden" name="music_enable" value="0">
+    <button class="btn btn-sm btn-danger mb-3" type="submit">Deshabilitar</button>
+    <% } %>
+</form>
+
+<% if (user.guild.music_enable == 1) { %>
+
+<% if (typeof queue == 'object' && queue) { %>
+<form class="form-inline mb-3">
+    <button id="search-btn" class="btn btn-success mr-3">Añadir</button>
+    <input type="text" class="form-control" id="search-title" placeholder="Nombre del vídeo">
+</form>
+
+
+<div class="table-responsive-sm">
+    <table class="table table-hover">
+        <thead>
+            <tr class="text-center">
+                <th>Orden</th>
+                <th>Nombre</th>
+                <th>Link</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <% queue.forEach(function (ele, i) { %>
+            <tr class="text-center">
+                <td class="align-middle"><%= i + 1 %></td>
+                <td class="align-middle"><%= ele.title %></td>
+                <td class="align-middle"><%= ele.url %></td>
+                <form action="/dashboard/music/delete/<%= ele.title %>" id="delete-form" method="post">
+                    <td class="d-print-none">
+                        <input type="submit" id="delete-btn" value="Eliminar" class="btn btn-default btn-danger" />
+                    </td>
+                </form>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>
+<% } else { %>
+El bot no está reproduciendo nada en éste momento. Inicia una lista con el comando !play (url).
+<% } %>
+<% } %>
+
+<script src="https://apis.google.com/js/client.js?onload=googleApiClientReady" gapi_processed="true"> </script>
+
+
+<script>
+    document.getElementById('search-btn').addEventListener('click', (e) => {
+        e.preventDefault();
+        gapi.client.setApiKey('AIzaSyDaoATMalwFjJ_2feBXbyGxyKIzsMNkJtw');
+        gapi.client.load('youtube', 'v3', function () {
+            var q = $('#search-title').val();
+            var request = gapi.client.youtube.search.list({
+                q: q,
+                part: 'snippet'
+            });
+            request.execute(function (response) {
+                var str = JSON.stringify(response.result, '', 4);
+                var vid = response.items[0].id.videoId;
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/dashboard/music/add';
+
+                const hiddenField = document.createElement('input');
+                hiddenField.type = 'hidden';
+                hiddenField.name = 'url';
+                hiddenField.value = `https://www.youtube.com/watch?v=${vid}`;
+
+                form.appendChild(hiddenField);
+
+                document.body.appendChild(form);
+                form.submit();
+            });
+        });
+    });
+</script>
+
+<%- include("_footer") -%>
