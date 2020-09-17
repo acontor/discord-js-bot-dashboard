@@ -4,6 +4,7 @@ require('./discord/admin-commands.js');
 require('./discord/commands.js');
 require('./discord/music.js');
 require('./discord/videogames.js');
+require('./discord/dice.js');
 
 const express = require("express");
 const app = express();
